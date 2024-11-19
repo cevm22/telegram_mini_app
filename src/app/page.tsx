@@ -11,6 +11,7 @@ export default function Home() {
   const [emojis, setEmojis] = useState<{ emoji: string; style: any }[]>([])
   const [userData, setUserData] = useState<UserData | null>(null)
   const router = useRouter()
+  const [customURL, setCustomURL] = useState<string>('');
 
   useEffect(() => {
     if (typeof window !== "undefined" && WebApp.initDataUnsafe.user) {
@@ -58,8 +59,9 @@ export default function Home() {
   }
 
   const openBlankPage = () => {
-    window.open('https://example.com', '_blank') // Replace with your desired URL
-  }
+    const url = customURL.trim() || 'https://example.com';
+    window.open(url, '_blank');
+  };
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden">
@@ -138,6 +140,16 @@ export default function Home() {
           Open Blank Page
         </button>
       </div>
+      <div className="mt-4 flex flex-col items-center">
+        <input
+          type="text"
+          placeholder="Enter URL"
+          value={customURL}
+          onChange={(e) => setCustomURL(e.target.value)}
+          className="w-full max-w-md p-2 text-black rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
 
       {showWinner && (
         <div
