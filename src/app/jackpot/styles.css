@@ -1,0 +1,20 @@
+button {
+    position: relative;
+    z-index: 10;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+@media (min-width: 768px) {
+    .flex-col.items-center {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    .text-xl.font-bold {
+        margin: 0 8px;
+        /* Adds a bit of space around the comma */
+    }
+}
