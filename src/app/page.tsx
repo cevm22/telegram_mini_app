@@ -1,19 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import WebApp from '@twa-dev/sdk'
 import { useState, useEffect } from 'react'
 
-export default function JackpotPage() {
+export default function Home() {
   const [numbers, setNumbers] = useState<string[]>(['0', '0', '0', '0', '0', '0'])
   const [showWinner, setShowWinner] = useState(false)
   const [emojis, setEmojis] = useState<{ emoji: string; style: any }[]>([])
   const [userData, setUserData] = useState<UserData | null>(null)
 
   useEffect(() => {
-    if (WebApp.initDataUnsafe.user) {
+    if (typeof window !== "undefined" && WebApp.initDataUnsafe.user) {
       setUserData(WebApp.initDataUnsafe.user as UserData)
     }
+
     generateEmojis()
   }, [])
 
@@ -51,11 +52,13 @@ export default function JackpotPage() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden">
-      {emojis.map((emoji, index) => (
-        <span key={index} className="absolute" style={emoji.style}>
-          {emoji.emoji}
-        </span>
-      ))}
+      {typeof window !== "undefined" &&
+        emojis.map((emoji, index) => (
+          <span key={index} className="absolute" style={emoji.style}>
+            {emoji.emoji}
+          </span>
+        ))}
+
       <div>
         <div className="z-10 flex flex-col items-center gap-4 mb-8 px-4">
           {/* Flex Container for Both Blocks */}
