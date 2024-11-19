@@ -1,14 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
+import WebApp from '@twa-dev/sdk'
 import { useState, useEffect } from 'react'
 
 export default function JackpotPage() {
   const [numbers, setNumbers] = useState<string[]>(['0', '0', '0', '0', '0', '0'])
   const [showWinner, setShowWinner] = useState(false)
   const [emojis, setEmojis] = useState<{ emoji: string; style: any }[]>([])
+  const [userData, setUserData] = useState<UserData | null>(null)
 
   useEffect(() => {
+    if (WebApp.initDataUnsafe.user) {
+      setUserData(WebApp.initDataUnsafe.user as UserData)
+    }
     generateEmojis()
   }, [])
 
@@ -33,6 +38,15 @@ export default function JackpotPage() {
     const newNumbers = Array.from({ length: 6 }, () => Math.floor(Math.random() * 10).toString())
     setNumbers(newNumbers)
     setShowWinner(Math.random() > 0.5) // 20% chance of winning for demo purposes
+  }
+
+  interface UserData {
+    id: number;
+    first_name: string;
+    last_name?: string;
+    username?: string;
+    language_code: string;
+    is_premium?: boolean;
   }
 
   return (
@@ -81,6 +95,21 @@ export default function JackpotPage() {
       >
         ROLL IT
       </button>
+      <p>
+        {userData ? (
+          <>
+            <strong>ID:</strong> {userData.id} <br />
+            <strong>First Name:</strong> {userData.first_name} <br />
+            <strong>Last Name:</strong> {userData.last_name || "N/A"} <br />
+            <strong>Username:</strong> {userData.username || "N/A"} <br />
+            <strong>Language Code:</strong> {userData.language_code} <br />
+            <strong>Premium User:</strong> {userData.is_premium ? "Yes" : "No"} <br />
+          </>
+        ) : (
+          "No user data available."
+        )}
+      </p>
+
       {showWinner && (
         <div
           className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
