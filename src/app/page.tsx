@@ -3,12 +3,14 @@
 
 import WebApp from '@twa-dev/sdk'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const [numbers, setNumbers] = useState<string[]>(['0', '0', '0', '0', '0', '0'])
   const [showWinner, setShowWinner] = useState(false)
   const [emojis, setEmojis] = useState<{ emoji: string; style: any }[]>([])
   const [userData, setUserData] = useState<UserData | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     if (typeof window !== "undefined" && WebApp.initDataUnsafe.user) {
@@ -48,6 +50,15 @@ export default function Home() {
     username?: string;
     language_code: string;
     is_premium?: boolean;
+  }
+
+
+  const goToDummyPage = () => {
+    router.push('/dummy-page') // Replace with an actual page in your app
+  }
+
+  const openBlankPage = () => {
+    window.open('https://example.com', '_blank') // Replace with your desired URL
   }
 
   return (
@@ -112,6 +123,21 @@ export default function Home() {
           "No user data available."
         )}
       </p>
+
+      <div className="mt-6 flex flex-col gap-4">
+        <button
+          onClick={goToDummyPage}
+          className="bg-blue-500 text-white font-bold py-3 px-8 rounded-full text-xl sm:text-2xl shadow-lg hover:bg-blue-400 transition duration-300"
+        >
+          Go to Dummy Page
+        </button>
+        <button
+          onClick={openBlankPage}
+          className="bg-green-500 text-white font-bold py-3 px-8 rounded-full text-xl sm:text-2xl shadow-lg hover:bg-green-400 transition duration-300"
+        >
+          Open Blank Page
+        </button>
+      </div>
 
       {showWinner && (
         <div
