@@ -1,101 +1,97 @@
-import Image from "next/image";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
 
-export default function Home() {
+import { useState, useEffect } from 'react'
+
+export default function JackpotPage() {
+  const [numbers, setNumbers] = useState<string[]>(['0', '0', '0', '0', '0', '0'])
+  const [showWinner, setShowWinner] = useState(false)
+  const [emojis, setEmojis] = useState<{ emoji: string; style: any }[]>([])
+
+  useEffect(() => {
+    generateEmojis()
+  }, [])
+
+  const generateEmojis = () => {
+    const emojiList = ['✊', '✌️', '✋']
+
+    const newEmojis = Array.from({ length: 30 }, () => ({
+      emoji: emojiList[Math.floor(Math.random() * emojiList.length)],
+      style: {
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        fontSize: `${Math.random() * 3 + 1}rem`,
+        opacity: 0.2,
+        transform: `rotate(${Math.random() * 360}deg)`,
+      },
+    }))
+    setEmojis(newEmojis)
+  }
+
+  const rollNumbers = () => {
+    // In a real scenario, this would be an API call to the backend
+    const newNumbers = Array.from({ length: 6 }, () => Math.floor(Math.random() * 10).toString())
+    setNumbers(newNumbers)
+    setShowWinner(Math.random() > 0.5) // 20% chance of winning for demo purposes
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden">
+      {emojis.map((emoji, index) => (
+        <span key={index} className="absolute" style={emoji.style}>
+          {emoji.emoji}
+        </span>
+      ))}
+      <div>
+        <div className="z-10 flex flex-col items-center gap-4 mb-8 px-4">
+          {/* Flex Container for Both Blocks */}
+          <div className="flex flex-wrap justify-center items-center gap-2">
+            {/* First Block: First 3 Numbers and Comma */}
+            <div className="flex items-center gap-2">
+              {numbers.slice(0, 3).map((number, index) => (
+                <div
+                  key={`top-${index}`}
+                  className="w-16 h-20 sm:w-20 sm:h-24 bg-gray-800 rounded-lg flex items-center justify-center text-4xl sm:text-5xl font-bold shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                >
+                  {number}
+                </div>
+              ))}
+              {/* Comma */}
+              <div className="text-6xl font-bold text-white mx-2">,</div>
+            </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {/* Second Block: Remaining Numbers */}
+            <div className="flex items-center gap-2">
+              {numbers.slice(3).map((number, index) => (
+                <div
+                  key={`bottom-${index}`}
+                  className="w-16 h-20 sm:w-20 sm:h-24 bg-gray-800 rounded-lg flex items-center justify-center text-4xl sm:text-5xl font-bold shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                >
+                  {number}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+      </div>
+      <button
+        onClick={rollNumbers}
+        className="bg-yellow-500 text-red-600 font-bold py-3 px-8 rounded-full text-xl sm:text-2xl shadow-lg hover:bg-yellow-400 transition duration-300"
+      >
+        ROLL IT
+      </button>
+      {showWinner && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+          onClick={() => setShowWinner(false)}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <div className="bg-yellow-500 p-8 rounded-lg text-center">
+            <h2 className="text-4xl font-bold mb-4 text-black shadow-[0_0_10px_gold]">WINNER!</h2>
+            <p className="text-2xl text-black">You won Nothing!! 0000</p>
+          </div>
+        </div>
+      )}
     </div>
-  );
+  )
 }
