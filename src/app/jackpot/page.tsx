@@ -123,7 +123,7 @@ export default function Home() {
 
             </div>
             <button
-                onClick={rollNumbers}
+                onClick={() => rollCustom(1, "free")}
                 className="btn-yellow text-red-600 font-bold py-3 px-8 rounded-full text-xl sm:text-2xl shadow-lg "
             >
                 ROLL IT
@@ -157,7 +157,7 @@ export default function Home() {
 
                 <div className="flex items-center justify-between w-full">
                     <button
-                        onClick={() => rollCustom(5)}
+                        onClick={() => rollCustom(5, isPoints ? "points" : "chips")}
                         className={`${isPoints ? 'btn-blue' : 'btn-green'} text-white font-bold py-3 px-8 rounded-full text-xl sm:text-2xl shadow-lg`}
                     >
                         Roll it! x 5
@@ -169,7 +169,7 @@ export default function Home() {
 
                 <div className="flex items-center justify-between w-full">
                     <button
-                        onClick={() => rollCustom(10)}
+                        onClick={() => rollCustom(10, isPoints ? "points" : "chips")}
                         className={`${isPoints ? 'btn-blue' : 'btn-green'} text-white font-bold py-3 px-8 rounded-full text-xl sm:text-2xl shadow-lg`}
 
                     >
