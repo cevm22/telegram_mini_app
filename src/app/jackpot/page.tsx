@@ -52,6 +52,14 @@ export default function Home() {
                 ))}
 
             <div>
+                <span className="bg-black text-red-500 rounded-xl p-4 mx-auto flex items-center justify-center text-5xl sm:text-5xl font-bold text-center shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.5)] max-w-fit">
+                    $12345.12
+                </span>
+
+                <span className="text-white rounded-xl p-6  mx-auto flex items-center justify-center text-3xl sm:text-3xl font-bold text-center hover:shadow-2xl transition-shadow duration-300 ">
+                    Hit the Jackpot with 666666!
+                </span>
+
                 <div className="z-10 flex flex-col items-center gap-4 mb-8 px-4">
                     {/* Flex Container for Both Blocks */}
                     <div className="flex flex-wrap justify-center items-center gap-2">
