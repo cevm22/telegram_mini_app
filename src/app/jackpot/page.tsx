@@ -30,15 +30,21 @@ export default function Home() {
         setEmojis(newEmojis)
     }
 
-    const rollNumbers = () => {
-        // DUMMY ROLL NUMBER, PENDING TO CHANGE ACCORDING SERVER RESPONSE
-        const inputNumber = "123456";
-        const newNumbers = Array.from(inputNumber, (digit) => digit);
-        console.log(newNumbers)
-        setNumbers(newNumbers)
-        // SET THIS ACCORDING SERVER RESPONSE
-        setShowWinner(Math.random() > 0.5) // 20% chance of winning for demo purposes
-    }
+    const showNumbers = async (numbersArray = []) => {
+        for (const num of numbersArray) {
+            // Extract digits to string and transform to array
+            const newNumbers = Array.from(String(num[0]), (digit) => digit);
+
+            // Set delay to show the changes on UI
+            await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay
+            setNumbers(newNumbers);
+            if (num[1] === 1 && num[0] === 666666) {
+                setShowWinner(true);
+                return
+            }
+        }
+
+    };
 
     const rollCustom = async (qty: number, currency_type = "free") => {
         console.log("Roll times: ", qty, "currency_type", currency_type)
@@ -65,6 +71,10 @@ export default function Home() {
             }
 
             console.log("API data:", responseData);
+            showNumbers(responseData.numbers)
+            const user_bal = responseData.user_bal
+            const jackpot_bal = responseData.jackpot_bal
+            console.log("user_bal", user_bal, "jackpot_bal", jackpot_bal)
 
 
         } catch (error) {
