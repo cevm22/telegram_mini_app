@@ -17,7 +17,7 @@ export default function Home() {
     const generateEmojis = () => {
         const emojiList = ['✊', '✌️', '✋']
 
-        const newEmojis = Array.from({ length: 30 }, () => ({
+        const newEmojis = Array.from({ length: 25 }, () => ({
             emoji: emojiList[Math.floor(Math.random() * emojiList.length)],
             style: {
                 top: `${Math.random() * 100}%`,
@@ -31,15 +31,45 @@ export default function Home() {
     }
 
     const rollNumbers = () => {
-        // In a real scenario, this would be an API call to the backend
-        const newNumbers = Array.from({ length: 6 }, () => Math.floor(Math.random() * 10).toString())
+        // DUMMY ROLL NUMBER, PENDING TO CHANGE ACCORDING SERVER RESPONSE
+        const inputNumber = "123456";
+        const newNumbers = Array.from(inputNumber, (digit) => digit);
+        console.log(newNumbers)
         setNumbers(newNumbers)
+        // SET THIS ACCORDING SERVER RESPONSE
         setShowWinner(Math.random() > 0.5) // 20% chance of winning for demo purposes
     }
 
-    const rollCustom = (qty: number) => {
-        // router.push('/dummy-page') // Replace with an actual page in your app
-        console.log("Roll times: ", qty)
+    const rollCustom = async (qty: number, currency_type = "free") => {
+        console.log("Roll times: ", qty, "currency_type", currency_type)
+        try {
+            const reqBody = JSON.stringify({
+                userId: "user123",
+                currency_type: currency_type, // "points", "chips", "free"
+                times: qty
+            })
+
+            const res = await fetch('/api/jackpot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: reqBody
+            });
+
+            const responseData = await res.json();
+
+            if (responseData.error) {
+                console.log("error", responseData)
+                return
+            }
+
+            console.log("API data:", responseData);
+
+
+        } catch (error) {
+            console.error('Unexpected error during logout:', error);
+        }
     }
 
     return (
