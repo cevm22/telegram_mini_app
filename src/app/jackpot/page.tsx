@@ -38,7 +38,7 @@ export default function Home() {
             // Set delay to show the changes on UI
             await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay
             setNumbers(newNumbers);
-            if (num[1] === 1 && num[0] === 666666) {
+            if (num[1] === 1 && num[0] === "666666") {
                 setShowWinner(true);
                 return
             }

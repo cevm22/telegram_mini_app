@@ -3,12 +3,11 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
     // Parse the incoming JSON body
+    const backendServer = process.env.SERVER_URL
     const { userId, currency_type = "points", times = 1 } = await request.json();
 
     /////////////////////////////////////////////
     // CHECK IF THE USER IS LOGGED AND NOT BANNED
-    // ASK TO SERVER THE NUMBERS
-    // RETURN IN JSON THE numbers in array[number,win/1-lose/0], 
     /////////////////////////////////////////////
 
     // Validate required fields
@@ -38,11 +37,30 @@ export async function POST(request: Request) {
         );
     }
 
-    // Mock response
-    return NextResponse.json({
-        user_id: userId,
-        numbers: [[123456, 0], [654321, 0], [987123, 0]],
-        jackpot_bal: 123.45,
-        user_bal: { points: 123, chips: 456, free_rolls: 7 },
-    });
+    // ASK TO SERVER THE NUMBERS
+    try {
+        const backendRes = await fetch(`${backendServer}/numbers`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: userId, currency_type, times }),
+        });
+
+        if (!backendRes.ok) {
+            const errorData = await backendRes.json();
+            return NextResponse.json({ error: errorData.error || "Flask server error", status: backendRes.status });
+        }
+
+        const data = await backendRes.json();
+
+        return NextResponse.json({
+            user_id: userId,
+            ...data,
+        });
+    } catch (error) {
+        return NextResponse.json({
+            error: "Failed to communicate with Flask server",
+            details: error,
+            status: 500,
+        });
+    }
 }
