@@ -7,14 +7,37 @@ button:hover {
     transform: scale(1.05);
 }
 
-@media (min-width: 768px) {
-    .flex-col.items-center {
-        flex-direction: row;
-        flex-wrap: nowrap;
-    }
+/* Button styles */
+.btn-yellow {
+    background-color: #facc15;
+    color: #dc2626;
+    transition: background-color 0.3s;
+}
 
-    .text-xl.font-bold {
-        margin: 0 8px;
-        /* Adds a bit of space around the comma */
-    }
+.btn-yellow:hover {
+    background-color: #fbbf24;
+}
+
+.btn-blue {
+    background-color: #3b82f6;
+    color: #ffffff;
+    transition: background-color 0.3s;
+    width: 200px;
+
+}
+
+.btn-blue:hover {
+    background-color: #2563eb;
+}
+
+.btn-green {
+    background-color: #22c55e;
+    color: #ffffff;
+    transition: background-color 0.3s;
+    width: 200px;
+
+}
+
+.btn-green:hover {
+    background-color: #16a34a;
 }

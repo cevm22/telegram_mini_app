@@ -1,14 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState, useEffect } from 'react'
+import './styles.css'
 
-export default function JackpotPage() {
+export default function Home() {
     const [numbers, setNumbers] = useState<string[]>(['0', '0', '0', '0', '0', '0'])
     const [showWinner, setShowWinner] = useState(false)
     const [emojis, setEmojis] = useState<{ emoji: string; style: any }[]>([])
-
+    const [isPoints, setIsPoints] = useState(true)
     useEffect(() => {
+
         generateEmojis()
     }, [])
 
@@ -35,13 +37,20 @@ export default function JackpotPage() {
         setShowWinner(Math.random() > 0.5) // 20% chance of winning for demo purposes
     }
 
+    const rollCustom = (qty: number) => {
+        // router.push('/dummy-page') // Replace with an actual page in your app
+        console.log("Roll times: ", qty)
+    }
+
     return (
         <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden">
-            {emojis.map((emoji, index) => (
-                <span key={index} className="absolute" style={emoji.style}>
-                    {emoji.emoji}
-                </span>
-            ))}
+            {typeof window !== "undefined" &&
+                emojis.map((emoji, index) => (
+                    <span key={index} className="absolute" style={emoji.style}>
+                        {emoji.emoji}
+                    </span>
+                ))}
+
             <div>
                 <div className="z-10 flex flex-col items-center gap-4 mb-8 px-4">
                     {/* Flex Container for Both Blocks */}
@@ -77,10 +86,64 @@ export default function JackpotPage() {
             </div>
             <button
                 onClick={rollNumbers}
-                className="bg-yellow-500 text-red-600 font-bold py-3 px-8 rounded-full text-xl sm:text-2xl shadow-lg hover:bg-yellow-400 transition duration-300"
+                className="btn-yellow text-red-600 font-bold py-3 px-8 rounded-full text-xl sm:text-2xl shadow-lg "
             >
                 ROLL IT
             </button>
+
+            <br />
+            <br />
+            <br />
+
+            <div className="mt-6 flex flex-col gap-4 items-center">
+                <div className="flex items-center space-x-4 mb-4">
+                    {/* Toggle Switch */}
+                    <button
+                        type="button"
+                        onClick={() => setIsPoints(!isPoints)}
+                        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300 ${isPoints ? 'bg-blue-500' : 'bg-green-500'
+                            }`}
+                    >
+                        <span
+                            className={`inline-block h-6 w-6 transform rounded-full bg-white shadow transition-transform duration-300 ${isPoints ? 'translate-x-6' : 'translate-x-0'
+                                }`}
+                        />
+                    </button>
+
+                    {/* Label */}
+                    <span className=" bg-gray-800 rounded-lg flex items-center justify-center text-4xl sm:text-5xl font-bold shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                        {isPoints ? 'POINTS' : 'CHIPS'}
+                    </span>
+                </div>
+
+
+                <div className="flex items-center justify-between w-full">
+                    <button
+                        onClick={() => rollCustom(5)}
+                        className={`${isPoints ? 'btn-blue' : 'btn-green'} text-white font-bold py-3 px-8 rounded-full text-xl sm:text-2xl shadow-lg`}
+                    >
+                        Roll it! x 5
+                    </button>
+                    <span className="ml-4 text-lg">
+                        {isPoints ? '100 points' : '$0.02'}
+                    </span>
+                </div>
+
+                <div className="flex items-center justify-between w-full">
+                    <button
+                        onClick={() => rollCustom(10)}
+                        className={`${isPoints ? 'btn-blue' : 'btn-green'} text-white font-bold py-3 px-8 rounded-full text-xl sm:text-2xl shadow-lg`}
+
+                    >
+                        Roll it! x 10
+                    </button>
+                    <span className="ml-4 text-lg">
+                        {isPoints ? '170 points' : '$0.04'}
+                    </span>
+                </div>
+            </div>
+
+
             {showWinner && (
                 <div
                     className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
