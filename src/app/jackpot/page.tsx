@@ -65,6 +65,7 @@ export default function Home() {
 
             const responseData = await res.json();
 
+            // Handle errors through the UI instead of logging them to the console
             if (responseData.error) {
                 console.log("error", responseData)
                 return
