@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import './styles.css'
+import GameBoard from "../components/GameBoardRPS";
 
 const RpsRankedPage = () => {
     const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -113,19 +114,20 @@ const RpsRankedPage = () => {
                 <button onClick={() => handleConnect(true)}>Connect LOBBY</button>
             </div>
 
-            {/* Chat Log */}
-            <div id="chat-log" style={{ backgroundColor: "#222", padding: "10px", borderRadius: "5px", minHeight: "150px", marginBottom: "20px", overflowY: "auto" }}>
-                {chatLog.map((log, index) => (
-                    <p key={index} style={{ margin: 0 }}>{log}</p>
-                ))}
-            </div>
+            {/* GameBoard component */}
 
-            {/* Message Controls */}
-            <div id="message-controls" style={{ marginBottom: "20px" }}>
-
-                <button onClick={clearChat} style={{ marginRight: "10px" }}>
-                    Clear Chat
-                </button>
+            <div>
+                <GameBoard
+                    blueMove="✌️"
+                    blueScore={0}
+                    redMove="✊"
+                    redScore={1}
+                    blueBluff="✊"
+                    redBluff="✋"
+                    setWinner={"tie"}
+                    gameWinner={null}
+                    resetGame={false}
+                />
             </div>
 
             {/* Game Controls */}
@@ -154,6 +156,19 @@ const RpsRankedPage = () => {
                 >
                     ✌️ SCISSORS ✌️
                 </button>
+            </div>
+            {/* Message Controls */}
+            <div id="message-controls" style={{ marginBottom: "20px" }}>
+
+                <button onClick={clearChat} style={{ marginRight: "10px" }}>
+                    Clear Chat
+                </button>
+            </div>
+            {/* Chat Log */}
+            <div id="chat-log" style={{ backgroundColor: "#222", padding: "10px", borderRadius: "5px", minHeight: "150px", marginBottom: "20px", overflowY: "auto" }}>
+                {chatLog.map((log, index) => (
+                    <p key={index} style={{ margin: 0 }}>{log}</p>
+                ))}
             </div>
 
 
