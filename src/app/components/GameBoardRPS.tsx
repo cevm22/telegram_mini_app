@@ -9,8 +9,8 @@ interface GameBoardProps {
     redScore: number;
     blueBluff?: string;
     redBluff?: string;
-    setWinner?: "blue" | "red" | "tie" | null;
-    gameWinner?: "blue" | "red" | null;
+    setWinner: string | null;
+    gameWinner: string | null;
     resetGame?: boolean;
 }
 

@@ -1,8 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
 import './styles.css'
 import GameBoard from "../components/GameBoardRPS";
+
+const EmojisList: Record<string, string> = {
+    rock: "✊",
+    paper: "✋",
+    scissors: "✌️",
+};
 
 const RpsRankedPage = () => {
     const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -11,8 +18,12 @@ const RpsRankedPage = () => {
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const [selectedMove, setSelectedMove] = useState<string | null>(null);
+    const [blueMove, setBlueMove] = useState<string | "">("")
     const [blueScore, setBlueScore] = useState<number | 0>(0)
     const [redScore, setRedScore] = useState<number | 0>(0)
+    const [redMove, setRedMove] = useState<string | "">("")
+    const [roundWinner, setRoundWinner] = useState<string | null>(null)
+    const [gameWinner, setGameWinner] = useState<string | null>(null)
 
     useEffect(() => {
         console.log("redScore", redScore, "blueScore", blueScore)
@@ -58,12 +69,33 @@ const RpsRankedPage = () => {
                     setSelectedMove(null)
                     if (data.winner === 'blue') {
                         setBlueScore((prevBlueScore) => prevBlueScore + 1);
+                        setRoundWinner(data.winner)
+
                     }
                     if (data.winner === 'red') {
                         setRedScore((prevRedScore) => prevRedScore + 1);
+                        setRoundWinner(data.winner)
+
                     }
+                    if (data.winner === 'TIE') {
+                        setRoundWinner("tie")
+
+                    }
+                    const blue_emoji_move = changeToEmoji(data.blue_move);
+                    const red_emoji_move = changeToEmoji(data.red_move);
+                    setBlueMove(blue_emoji_move)
+                    setRedMove(red_emoji_move)
+
+                    // Clean Board
+                    setTimeout(() => {
+                        clearBoard();
+                    }, 2000);
                 }
-                if (data.type === "finished") { }
+                if (data.type === "finished") {
+                    setGameWinner(data.msg)
+
+
+                }
 
 
                 appendChatLog(event.data);
@@ -99,6 +131,16 @@ const RpsRankedPage = () => {
         setChatLog([]);
     };
 
+    const changeToEmoji = (word: string): string | "" => {
+        return EmojisList[word];
+    };
+
+    const clearBoard = () => {
+        setBlueMove("")
+        setRedMove("")
+        setRoundWinner(null)
+    }
+
     return (
         <div style={{ backgroundColor: "black", color: "blue", padding: "20px", minHeight: "100vh" }}>
             <h1>WebSocket Chat Client</h1>
@@ -118,14 +160,14 @@ const RpsRankedPage = () => {
 
             <div>
                 <GameBoard
-                    blueMove="✌️"
-                    blueScore={0}
-                    redMove="✊"
-                    redScore={1}
+                    blueMove={blueMove}
+                    blueScore={blueScore}
+                    redMove={redMove}
+                    redScore={redScore}
                     blueBluff="✊"
                     redBluff="✋"
-                    setWinner={"tie"}
-                    gameWinner={null}
+                    setWinner={roundWinner}
+                    gameWinner={gameWinner}
                     resetGame={false}
                 />
             </div>
