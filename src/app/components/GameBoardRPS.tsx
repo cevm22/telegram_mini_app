@@ -118,7 +118,7 @@ export default function GameBoard({
                                 }`}
                         >
                             {gameWinner?.toUpperCase() + " "}
-                        </span>{gameWinner}
+                        </span>
                         wins the game!
                     </p>
                     <button

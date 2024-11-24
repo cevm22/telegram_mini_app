@@ -24,6 +24,7 @@ const RpsRankedPage = () => {
     const [redMove, setRedMove] = useState<string | "">("")
     const [roundWinner, setRoundWinner] = useState<string | null>(null)
     const [gameWinner, setGameWinner] = useState<string | null>(null)
+    const [teamColor, setTeamColor] = useState<string | "">("")
 
     useEffect(() => {
         console.log("redScore", redScore, "blueScore", blueScore)
@@ -54,6 +55,7 @@ const RpsRankedPage = () => {
         newSocket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
+                console.log("data", data)
                 if (data.msg === "RANKED GAME") {
                     console.log("RANKED GAME started.");
                     if (newSocket.readyState === WebSocket.OPEN) {
@@ -63,6 +65,11 @@ const RpsRankedPage = () => {
                     } else {
                         console.error("WebSocket is not open.");
                     }
+                }
+                if (data.type === "color") {
+                    console.log("teamColor", data)
+                    setTeamColor(data.msg)
+
                 }
                 if (data.type === "summary") {
                     console.log("SUMMARY ")
@@ -119,6 +126,7 @@ const RpsRankedPage = () => {
     };
 
     const handleSend = (type: string, msg: string) => {
+
         if (type === 'move') {
             setSelectedMove(msg)
         }
@@ -171,6 +179,15 @@ const RpsRankedPage = () => {
                     resetGame={false}
                 />
             </div>
+            <p className="text-xl text-white justify-center items-center flex">
+                <span
+                    className={`font-bold ${teamColor === "blue" ? "text-blue-500" : teamColor === "red" ? "text-red-500" : ""
+                        }`}
+                >
+                    {teamColor?.toUpperCase() + " "}
+                    team
+                </span>
+            </p>
 
             {/* Game Controls */}
             <div
@@ -179,22 +196,22 @@ const RpsRankedPage = () => {
             >
                 <button
                     onClick={() => handleSend("move", "rock")}
-                    className={`${selectedMove === "rock" ? "btn-red" : "btn-blue"
-                        } text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                    className={`${selectedMove === "rock" ? "btn-yellow" : "btn-blue"}
+                     font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
                 >
                     ✊ ROCK ✊
                 </button>
                 <button
                     onClick={() => handleSend("move", "paper")}
-                    className={`${selectedMove === "paper" ? "btn-red" : "btn-blue"
-                        } text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                    className={`${selectedMove === "paper" ? "btn-yellow" : "btn-blue"}
+                     text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
                 >
                     ✋ PAPER ✋
                 </button>
                 <button
                     onClick={() => handleSend("move", "scissors")}
-                    className={`${selectedMove === "scissors" ? "btn-red" : "btn-blue"
-                        } text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                    className={`${selectedMove === "scissors" ? "btn-yellow" : "btn-blue"}
+                     text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
                 >
                     ✌️ SCISSORS ✌️
                 </button>

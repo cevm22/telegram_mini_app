@@ -25,6 +25,13 @@ button:hover {
 
 }
 
+.btn-yellow {
+    background-color: #f3de21;
+    color: #000000;
+    transition: background-color 0.3s;
+    width: 200px;
+}
+
 .btn-blue:hover {
     background-color: #2563eb;
 }
