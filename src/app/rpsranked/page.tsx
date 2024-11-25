@@ -157,6 +157,15 @@ const RpsRankedPage = () => {
         setRoundWinner(null)
     }
 
+    const handleDialogClose = () => {
+        setTeamColor("")
+        setBlueMove("")
+        setRedMove("")
+        setRedScore(0)
+        setBlueScore(0)
+        //PENDING SHOW POPUP TO CONTINUE IN RANKED MODE IF NOT, THEN REDIRECT TO HOME
+    }
+
     return (
         <div style={{ backgroundColor: "black", color: "blue", padding: "20px", minHeight: "100vh" }}>
             <h1>WebSocket Chat Client</h1>
@@ -185,6 +194,7 @@ const RpsRankedPage = () => {
                     setWinner={roundWinner}
                     gameWinner={gameWinner}
                     resetGame={false}
+                    onDialogClose={handleDialogClose}
                 />
             </div>
             <p className="text-xl text-white justify-center items-center flex">

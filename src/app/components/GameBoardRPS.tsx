@@ -12,6 +12,7 @@ interface GameBoardProps {
     setWinner: string | null;
     gameWinner: string | null;
     resetGame?: boolean;
+    onDialogClose?: () => void;
 }
 
 export default function GameBoard({
@@ -24,6 +25,7 @@ export default function GameBoard({
     setWinner,
     gameWinner,
     resetGame = false,
+    onDialogClose, // New prop
 }: GameBoardProps) {
 
     const [showWinDialog, setShowWinDialog] = useState(false);
@@ -40,6 +42,7 @@ export default function GameBoard({
 
     const handleCloseDialog = () => {
         setShowWinDialog(false);
+        if (onDialogClose) onDialogClose(); // Call the function if provided
     };
 
 
