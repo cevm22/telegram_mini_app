@@ -25,6 +25,8 @@ const RpsRankedPage = () => {
     const [roundWinner, setRoundWinner] = useState<string | null>(null)
     const [gameWinner, setGameWinner] = useState<string | null>(null)
     const [teamColor, setTeamColor] = useState<string | "">("")
+    const [isWaiting, setIsWaiting] = useState<boolean | true>(true)
+    const [lastBluff, setLastBluff] = useState<string | "">("")
 
     useEffect(() => {
         console.log("redScore", redScore, "blueScore", blueScore)
@@ -62,6 +64,7 @@ const RpsRankedPage = () => {
                         newSocket.send(JSON.stringify({ type: "system", msg: "RANKED GAME" }));
                         newSocket.send(JSON.stringify({ type: "start", msg: "start" }));
                         setSelectedMove(null)
+                        setIsWaiting(false)
                     } else {
                         console.error("WebSocket is not open.");
                     }
@@ -163,6 +166,7 @@ const RpsRankedPage = () => {
         setRedMove("")
         setRedScore(0)
         setBlueScore(0)
+        setIsWaiting(true)
         //PENDING SHOW POPUP TO CONTINUE IN RANKED MODE IF NOT, THEN REDIRECT TO HOME
     }
 
@@ -181,59 +185,75 @@ const RpsRankedPage = () => {
                 <button onClick={() => handleConnect(true)}>Connect LOBBY</button>
             </div>
 
-            {/* GameBoard component */}
 
             <div>
-                <GameBoard
-                    blueMove={blueMove}
-                    blueScore={blueScore}
-                    redMove={redMove}
-                    redScore={redScore}
-                    blueBluff="✊"
-                    redBluff="✋"
-                    setWinner={roundWinner}
-                    gameWinner={gameWinner}
-                    resetGame={false}
-                    onDialogClose={handleDialogClose}
-                />
-            </div>
-            <p className="text-xl text-white justify-center items-center flex">
-                <span
-                    className={`font-bold ${teamColor === "blue" ? "text-blue-500" : teamColor === "red" ? "text-red-500" : ""
-                        }`}
-                >
-                    {teamColor?.toUpperCase() + " "}
-                    team
-                </span>
-            </p>
 
-            {/* Game Controls */}
-            <div
-                id="message-controls-2"
-                className="flex flex-wrap items-center justify-center gap-4 mt-4"
-            >
-                <button
-                    onClick={() => handleSend("move", "rock")}
-                    className={`${selectedMove === "rock" ? "btn-yellow" : "btn-blue"}
+                <div>
+                    {isWaiting ? (
+                        <div className="flex items-center justify-center  text-2xl font-bold">
+                            Waiting for match...
+                        </div>
+                    ) : (
+                        <div>
+
+                            <GameBoard
+                                blueMove={blueMove}
+                                blueScore={blueScore}
+                                redMove={redMove}
+                                redScore={redScore}
+                                blueBluff="✊"
+                                redBluff="✋"
+                                setWinner={roundWinner}
+                                gameWinner={gameWinner}
+                                resetGame={false}
+                                onDialogClose={handleDialogClose}
+                            />
+                            <p className="text-xl text-white justify-center items-center flex">
+                                <span
+                                    className={`font-bold ${teamColor === "blue" ? "text-blue-500" : teamColor === "red" ? "text-red-500" : ""
+                                        }`}
+                                >
+                                    {teamColor?.toUpperCase() + " "}
+                                    team
+                                </span>
+                            </p>
+
+                            {/* Game Controls */}
+                            <div
+                                id="message-controls-2"
+                                className="flex flex-wrap items-center justify-center gap-4 mt-4"
+                            >
+                                <button
+                                    onClick={() => handleSend("move", "rock")}
+                                    className={`${selectedMove === "rock" ? "btn-yellow" : "btn-blue"}
                      font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
-                >
-                    ✊ ROCK ✊
-                </button>
-                <button
-                    onClick={() => handleSend("move", "paper")}
-                    className={`${selectedMove === "paper" ? "btn-yellow" : "btn-blue"}
+                                >
+                                    ✊ ROCK ✊
+                                </button>
+                                <button
+                                    onClick={() => handleSend("move", "paper")}
+                                    className={`${selectedMove === "paper" ? "btn-yellow" : "btn-blue"}
                      text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
-                >
-                    ✋ PAPER ✋
-                </button>
-                <button
-                    onClick={() => handleSend("move", "scissors")}
-                    className={`${selectedMove === "scissors" ? "btn-yellow" : "btn-blue"}
+                                >
+                                    ✋ PAPER ✋
+                                </button>
+                                <button
+                                    onClick={() => handleSend("move", "scissors")}
+                                    className={`${selectedMove === "scissors" ? "btn-yellow" : "btn-blue"}
                      text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
-                >
-                    ✌️ SCISSORS ✌️
-                </button>
+                                >
+                                    ✌️ SCISSORS ✌️
+                                </button>
+                            </div>
+                        </div>
+
+                    )}
+                </div>
+
+
+
             </div>
+
             {/* Message Controls */}
             <div id="message-controls" style={{ marginBottom: "20px" }}>
 
