@@ -27,6 +27,7 @@ const RpsRankedPage = () => {
     const [teamColor, setTeamColor] = useState<string | "">("")
     const [isWaiting, setIsWaiting] = useState<boolean | true>(true)
     const [lastBluff, setLastBluff] = useState<string | "">("")
+    const [isCleaning, setIsCleaning] = useState<boolean | false>(false)
 
     useEffect(() => {
         console.log("redScore", redScore, "blueScore", blueScore)
@@ -65,6 +66,8 @@ const RpsRankedPage = () => {
                         newSocket.send(JSON.stringify({ type: "start", msg: "start" }));
                         setSelectedMove(null)
                         setIsWaiting(false)
+                        setIsCleaning(false)
+
                     } else {
                         console.error("WebSocket is not open.");
                     }
@@ -97,8 +100,10 @@ const RpsRankedPage = () => {
                     setRedMove(red_emoji_move)
 
                     // Clean Board
+                    setIsCleaning(true)
                     setTimeout(() => {
                         clearBoard();
+                        setIsCleaning(false)
                     }, 2000);
                 }
                 if (data.type === "finished") {
@@ -223,28 +228,35 @@ const RpsRankedPage = () => {
                                 id="message-controls-2"
                                 className="flex flex-wrap items-center justify-center gap-4 mt-4"
                             >
-                                <button
-                                    onClick={() => handleSend("move", "rock")}
-                                    className={`${selectedMove === "rock" ? "btn-yellow" : "btn-blue"}
-                     font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
-                                >
-                                    ✊ ROCK ✊
-                                </button>
-                                <button
-                                    onClick={() => handleSend("move", "paper")}
-                                    className={`${selectedMove === "paper" ? "btn-yellow" : "btn-blue"}
-                     text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
-                                >
-                                    ✋ PAPER ✋
-                                </button>
-                                <button
-                                    onClick={() => handleSend("move", "scissors")}
-                                    className={`${selectedMove === "scissors" ? "btn-yellow" : "btn-blue"}
-                     text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
-                                >
-                                    ✌️ SCISSORS ✌️
-                                </button>
+                                {isCleaning ? (
+                                    <div className="text-xl font-bold text-gray-500">Cleaning board...</div>
+                                ) : (
+                                    <>
+                                        <button
+                                            onClick={() => handleSend("move", "rock")}
+                                            className={`${selectedMove === "rock" ? "btn-yellow" : "btn-blue"}
+                font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                                        >
+                                            ✊ ROCK ✊
+                                        </button>
+                                        <button
+                                            onClick={() => handleSend("move", "paper")}
+                                            className={`${selectedMove === "paper" ? "btn-yellow" : "btn-blue"}
+                text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                                        >
+                                            ✋ PAPER ✋
+                                        </button>
+                                        <button
+                                            onClick={() => handleSend("move", "scissors")}
+                                            className={`${selectedMove === "scissors" ? "btn-yellow" : "btn-blue"}
+                text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                                        >
+                                            ✌️ SCISSORS ✌️
+                                        </button>
+                                    </>
+                                )}
                             </div>
+
                         </div>
 
                     )}
