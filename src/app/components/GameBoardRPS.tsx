@@ -112,7 +112,7 @@ export default function GameBoard({
             </div>
 
             {/* Winner Dialog */}
-            {showWinDialog && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            {showWinDialog && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-white p-8 rounded-lg text-center">
                     <h2 className="text-3xl font-bold mb-4">Game Over!</h2>
                     <p className="text-xl">
