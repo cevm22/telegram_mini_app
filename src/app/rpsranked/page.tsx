@@ -19,14 +19,15 @@ const RpsRankedPage = () => {
     const passwordRef = useRef<HTMLInputElement>(null);
     const [selectedMove, setSelectedMove] = useState<string | null>(null);
     const [blueMove, setBlueMove] = useState<string | "">("")
+    const [blueBluff, setBlueBluff] = useState<string | "">("")
     const [blueScore, setBlueScore] = useState<number | 0>(0)
     const [redScore, setRedScore] = useState<number | 0>(0)
     const [redMove, setRedMove] = useState<string | "">("")
+    const [redBluff, setRedBluff] = useState<string | "">("")
     const [roundWinner, setRoundWinner] = useState<string | null>(null)
     const [gameWinner, setGameWinner] = useState<string | null>(null)
     const [teamColor, setTeamColor] = useState<string | "">("")
     const [isWaiting, setIsWaiting] = useState<boolean | true>(true)
-    const [lastBluff, setLastBluff] = useState<string | "">("")
     const [isCleaning, setIsCleaning] = useState<boolean | false>(false)
 
     useEffect(() => {
@@ -58,7 +59,6 @@ const RpsRankedPage = () => {
         newSocket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
-                console.log("data", data)
                 if (data.msg === "RANKED GAME") {
                     console.log("RANKED GAME started.");
                     if (newSocket.readyState === WebSocket.OPEN) {
@@ -75,8 +75,16 @@ const RpsRankedPage = () => {
                 if (data.type === "color") {
                     console.log("teamColor", data)
                     setTeamColor(data.msg)
-
                 }
+                if (data.type === "bluff" && !isCleaning) {
+                    if (data.color === 'blue') {
+                        setBlueBluff(changeToEmoji(data.msg))
+                    }
+                    if (data.color === 'red') {
+                        setRedBluff(changeToEmoji(data.msg))
+                    }
+                }
+
                 if (data.type === "summary") {
                     console.log("SUMMARY ")
                     setSelectedMove(null)
@@ -147,6 +155,15 @@ const RpsRankedPage = () => {
                     setRedMove(emoji_move)
                 }
             }
+            if (type === 'bluff') {
+                if (teamColor === "blue") {
+                    setBlueBluff(changeToEmoji(msg))
+                }
+                if (teamColor === "red") {
+                    setRedBluff(changeToEmoji(msg))
+                }
+
+            }
         }
         // Pending handling if nos websocket connection rise a POPUP for reconnect
     };
@@ -162,6 +179,8 @@ const RpsRankedPage = () => {
     const clearBoard = () => {
         setBlueMove("")
         setRedMove("")
+        setBlueBluff("")
+        setRedBluff("")
         setRoundWinner(null)
     }
 
@@ -171,6 +190,8 @@ const RpsRankedPage = () => {
         setRedMove("")
         setRedScore(0)
         setBlueScore(0)
+        setGameWinner(null)
+        setRoundWinner(null)
         setIsWaiting(true)
         //PENDING SHOW POPUP TO CONTINUE IN RANKED MODE IF NOT, THEN REDIRECT TO HOME
     }
@@ -190,6 +211,15 @@ const RpsRankedPage = () => {
                 <button onClick={() => handleConnect(true)}>Connect LOBBY</button>
             </div>
 
+            <div>
+                <button onClick={() => handleSend("bluff", "rock")}>bluff rock</button>
+                <br />
+                <button onClick={() => handleSend("bluff", "paper")}>bluff paper</button>
+                <br />
+                <button onClick={() => handleSend("bluff", "scissors")}>bluff scissors</button>
+                <br />
+            </div>
+
 
             <div>
 
@@ -206,8 +236,8 @@ const RpsRankedPage = () => {
                                 blueScore={blueScore}
                                 redMove={redMove}
                                 redScore={redScore}
-                                blueBluff="✊"
-                                redBluff="✋"
+                                blueBluff={blueBluff}
+                                redBluff={redBluff}
                                 setWinner={roundWinner}
                                 gameWinner={gameWinner}
                                 resetGame={false}
