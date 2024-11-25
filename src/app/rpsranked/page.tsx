@@ -127,12 +127,20 @@ const RpsRankedPage = () => {
 
     const handleSend = (type: string, msg: string) => {
 
-        if (type === 'move') {
-            setSelectedMove(msg)
-        }
         if (socket && socket.readyState === WebSocket.OPEN) {
             socket.send(JSON.stringify({ type, msg }));
+            if (type === 'move') {
+                const emoji_move = changeToEmoji(msg);
+                setSelectedMove(msg)
+                if (teamColor === "blue") {
+                    setBlueMove(emoji_move)
+                }
+                if (teamColor === "red") {
+                    setRedMove(emoji_move)
+                }
+            }
         }
+        // Pending handling if nos websocket connection rise a POPUP for reconnect
     };
 
     const clearChat = () => {
