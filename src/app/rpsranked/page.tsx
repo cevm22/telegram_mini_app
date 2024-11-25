@@ -29,6 +29,8 @@ const RpsRankedPage = () => {
     const [teamColor, setTeamColor] = useState<string | "">("")
     const [isWaiting, setIsWaiting] = useState<boolean | true>(true)
     const [isCleaning, setIsCleaning] = useState<boolean | false>(false)
+    const [showBluffButtons, setShowBluffButtons] = useState(false);
+    const [selectedBluff, setSelectedBluff] = useState<string | null>(null);
 
     useEffect(() => {
         console.log("redScore", redScore, "blueScore", blueScore)
@@ -156,6 +158,7 @@ const RpsRankedPage = () => {
                 }
             }
             if (type === 'bluff') {
+                setSelectedBluff(msg)
                 if (teamColor === "blue") {
                     setBlueBluff(changeToEmoji(msg))
                 }
@@ -182,6 +185,7 @@ const RpsRankedPage = () => {
         setBlueBluff("")
         setRedBluff("")
         setRoundWinner(null)
+        setSelectedBluff("")
     }
 
     const handleDialogClose = () => {
@@ -209,15 +213,6 @@ const RpsRankedPage = () => {
                     Connect
                 </button>
                 <button onClick={() => handleConnect(true)}>Connect LOBBY</button>
-            </div>
-
-            <div>
-                <button onClick={() => handleSend("bluff", "rock")}>bluff rock</button>
-                <br />
-                <button onClick={() => handleSend("bluff", "paper")}>bluff paper</button>
-                <br />
-                <button onClick={() => handleSend("bluff", "scissors")}>bluff scissors</button>
-                <br />
             </div>
 
 
@@ -253,36 +248,76 @@ const RpsRankedPage = () => {
                                 </span>
                             </p>
 
+                            {/* Toggle Button */}
+                            <div className="flex justify-center mt-4">
+                                <button
+                                    onClick={() => setShowBluffButtons((prev) => !prev)}
+                                    className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700"
+                                >
+                                    {showBluffButtons ? "Hide Bluff Buttons" : "Show Bluff Buttons"}
+                                </button>
+                            </div>
                             {/* Game Controls */}
                             <div
                                 id="message-controls-2"
-                                className="flex flex-wrap items-center justify-center gap-4 mt-4"
+                                className="flex flex-col items-center justify-center gap-4 mt-4"
                             >
                                 {isCleaning ? (
                                     <div className="text-xl font-bold text-gray-500">Cleaning board...</div>
                                 ) : (
                                     <>
-                                        <button
-                                            onClick={() => handleSend("move", "rock")}
-                                            className={`${selectedMove === "rock" ? "btn-yellow" : "btn-blue"}
-                font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
-                                        >
-                                            ✊ ROCK ✊
-                                        </button>
-                                        <button
-                                            onClick={() => handleSend("move", "paper")}
-                                            className={`${selectedMove === "paper" ? "btn-yellow" : "btn-blue"}
-                text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
-                                        >
-                                            ✋ PAPER ✋
-                                        </button>
-                                        <button
-                                            onClick={() => handleSend("move", "scissors")}
-                                            className={`${selectedMove === "scissors" ? "btn-yellow" : "btn-blue"}
-                text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
-                                        >
-                                            ✌️ SCISSORS ✌️
-                                        </button>
+                                        {/* Move Buttons */}
+                                        <div className="flex flex-col items-center gap-4">
+                                            <button
+                                                onClick={() => handleSend("move", "rock")}
+                                                className={`${selectedMove === "rock" ? "btn-yellow" : "btn-blue"}
+                    font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                                            >
+                                                ✊ ROCK ✊
+                                            </button>
+                                            <button
+                                                onClick={() => handleSend("move", "paper")}
+                                                className={`${selectedMove === "paper" ? "btn-yellow" : "btn-blue"}
+                    text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                                            >
+                                                ✋ PAPER ✋
+                                            </button>
+                                            <button
+                                                onClick={() => handleSend("move", "scissors")}
+                                                className={`${selectedMove === "scissors" ? "btn-yellow" : "btn-blue"}
+                    text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                                            >
+                                                ✌️ SCISSORS ✌️
+                                            </button>
+                                        </div>
+
+                                        {/* Bluff Buttons Section */}
+                                        {showBluffButtons && (
+                                            <div className="flex flex-col items-center gap-4 ">
+                                                <h3 className="text-lg font-bold">BLUFFING</h3>
+                                                <button
+                                                    onClick={() => handleSend("bluff", "rock")}
+                                                    className={`${selectedBluff === "rock" ? "btn-purple" : "btn-green"}
+                                                    text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                                                >
+                                                    Bluff ✊
+                                                </button>
+                                                <button
+                                                    onClick={() => handleSend("bluff", "paper")}
+                                                    className={`${selectedBluff === "paper" ? "btn-purple" : "btn-green"}
+                                                    text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                                                >
+                                                    Bluff ✋
+                                                </button>
+                                                <button
+                                                    onClick={() => handleSend("bluff", "scissors")}
+                                                    className={`${selectedBluff === "scissors" ? "btn-purple" : "btn-green"}
+                                                    text-white font-bold py-2 px-6 rounded-full text-lg sm:text-xl shadow-md transform hover:scale-105 transition-transform`}
+                                                >
+                                                    Bluff ✌️
+                                                </button>
+                                            </div>
+                                        )}
                                     </>
                                 )}
                             </div>

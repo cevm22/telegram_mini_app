@@ -44,6 +44,8 @@ button:hover {
 
 }
 
-.btn-green:hover {
-    background-color: #16a34a;
+.btn-purple {
+    background-color: #722672;
+    transition: background-color 0.3s;
+    width: 200px;
 }
