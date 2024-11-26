@@ -4,6 +4,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import './styles.css'
 import GameBoard from "../components/GameBoardRPS";
+import RpsRulesPopup from "../components/PopupRpsRules";
 
 const EmojisList: Record<string, string> = {
     rock: "✊",
@@ -31,6 +32,9 @@ const RpsRankedPage = () => {
     const [isCleaning, setIsCleaning] = useState<boolean | false>(false)
     const [showBluffButtons, setShowBluffButtons] = useState(false);
     const [selectedBluff, setSelectedBluff] = useState<string | null>(null);
+    const [showRules, setShowRules] = useState(false);
+
+
 
     useEffect(() => {
         console.log("redScore", redScore, "blueScore", blueScore)
@@ -200,6 +204,10 @@ const RpsRankedPage = () => {
         //PENDING SHOW POPUP TO CONTINUE IN RANKED MODE IF NOT, THEN REDIRECT TO HOME
     }
 
+    const toggleRulesPopup = () => {
+        setShowRules((prev) => !prev);
+    };
+
     return (
         <div style={{ backgroundColor: "black", color: "blue", padding: "20px", minHeight: "100vh" }}>
             <h1>WebSocket Chat Client</h1>
@@ -343,6 +351,15 @@ const RpsRankedPage = () => {
                 {chatLog.map((log, index) => (
                     <p key={index} style={{ margin: 0 }}>{log}</p>
                 ))}
+            </div>
+            <div className="relative">
+                {/* Help Button */}
+                <button
+                    onClick={toggleRulesPopup}
+                    className="fixed top-4 right-4 bg-gray-800 text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center hover:bg-gray-700 z-50"
+                > ? </button>
+                {/* Rules Popup */}
+                {showRules && <RpsRulesPopup onClose={toggleRulesPopup} />}
             </div>
 
 
