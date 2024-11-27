@@ -202,7 +202,10 @@ const RpsRankedPage = () => {
         setGameWinner(null)
         setRoundWinner(null)
         setIsWaiting(true)
-        //PENDING SHOW POPUP TO CONTINUE IN RANKED MODE IF NOT, THEN REDIRECT TO HOME
+
+        // Reconnect to Ranked lobby - PENDING the redirection flow
+        setShowPopup(true)
+
     }
 
     const toggleRulesPopup = () => {
