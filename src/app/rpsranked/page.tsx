@@ -5,6 +5,8 @@ import React, { useState, useRef, useEffect } from "react";
 import './styles.css'
 import GameBoard from "../components/GameBoardRPS";
 import RpsRulesPopup from "../components/PopupRpsRules";
+import PopupRps10Confirm from "../components/PopupRps10Confirm";
+import { generateUUID } from "../utils/GenFuncs";
 
 const EmojisList: Record<string, string> = {
     rock: "✊",
@@ -33,8 +35,13 @@ const RpsRankedPage = () => {
     const [showBluffButtons, setShowBluffButtons] = useState(false);
     const [selectedBluff, setSelectedBluff] = useState<string | null>(null);
     const [showRules, setShowRules] = useState(false);
+    const [showPopup, setShowPopup] = useState(true);
 
-
+    const handleAccept = () => {
+        console.log("Accepted! Entering the lobby...");
+        setShowPopup(false);
+        handleConnect()
+    };
 
     useEffect(() => {
         console.log("redScore", redScore, "blueScore", blueScore)
@@ -46,10 +53,10 @@ const RpsRankedPage = () => {
     };
 
     const handleConnect = () => {
-        const username = "321TESTING123"
+        const username = "TESTING-" + generateUUID(4)
         const password = "PASS"
 
-        const url = `ws://localhost:8000/ws/"ranked/lobby"?username=${username}&password=${password}`;
+        const url = `ws://localhost:8000/ws/ranked/lobby?username=${username}&password=${password}`;
         const newSocket = new WebSocket(url);
 
         newSocket.onopen = () => {
@@ -320,6 +327,15 @@ const RpsRankedPage = () => {
 
                     )}
                 </div>
+            </div>
+
+            <div>
+                {showPopup && (
+                    <PopupRps10Confirm
+                        onAccept={handleAccept}
+                        onClose={() => setShowPopup(false)}
+                    />
+                )}
             </div>
 
             <div className="relative">
