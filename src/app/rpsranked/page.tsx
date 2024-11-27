@@ -45,17 +45,11 @@ const RpsRankedPage = () => {
         setChatLog((prev) => [...prev, message]);
     };
 
-    const handleConnect = (lobby = false) => {
-        const roomId = roomIdRef.current?.value || "lobby";
-        const username = usernameRef.current?.value || "";
-        const password = passwordRef.current?.value || "";
+    const handleConnect = () => {
+        const username = "321TESTING123"
+        const password = "PASS"
 
-        if (!username || !password || (!lobby && !roomId)) {
-            alert("Please fill in all fields to connect.");
-            return;
-        }
-
-        const url = `ws://localhost:8000/ws/${lobby ? "ranked/lobby" : roomId}?username=${username}&password=${password}`;
+        const url = `ws://localhost:8000/ws/"ranked/lobby"?username=${username}&password=${password}`;
         const newSocket = new WebSocket(url);
 
         newSocket.onopen = () => {
@@ -210,19 +204,11 @@ const RpsRankedPage = () => {
 
     return (
         <div style={{ backgroundColor: "black", color: "blue", padding: "20px", minHeight: "100vh" }}>
-            <h1>WebSocket Chat Client</h1>
 
-            {/* Authentication and Connection Controls */}
-            <div id="controls" style={{ marginBottom: "20px" }}>
-                <input ref={roomIdRef} type="text" placeholder="Room ID" required style={{ marginRight: "10px" }} />
-                <input ref={usernameRef} type="text" placeholder="Username" required style={{ marginRight: "10px" }} />
-                <input ref={passwordRef} type="password" placeholder="Password" required style={{ marginRight: "10px" }} />
-                <button onClick={() => handleConnect(false)} style={{ marginRight: "10px" }}>
-                    Connect
-                </button>
-                <button onClick={() => handleConnect(true)}>Connect LOBBY</button>
+            <div className="text-center mb-6">
+                <h1 className="text-4xl font-extrabold text-yellow-500 uppercase">Ranked 10!</h1>
+                <p className="text-lg text-gray-400 italic mt-2">The winner gets <strong> $0.18 USDT</strong></p>
             </div>
-
 
             <div>
 
@@ -334,24 +320,8 @@ const RpsRankedPage = () => {
 
                     )}
                 </div>
-
-
-
             </div>
 
-            {/* Message Controls */}
-            <div id="message-controls" style={{ marginBottom: "20px" }}>
-
-                <button onClick={clearChat} style={{ marginRight: "10px" }}>
-                    Clear Chat
-                </button>
-            </div>
-            {/* Chat Log */}
-            <div id="chat-log" style={{ backgroundColor: "#222", padding: "10px", borderRadius: "5px", minHeight: "150px", marginBottom: "20px", overflowY: "auto" }}>
-                {chatLog.map((log, index) => (
-                    <p key={index} style={{ margin: 0 }}>{log}</p>
-                ))}
-            </div>
             <div className="relative">
                 {/* Help Button */}
                 <button
