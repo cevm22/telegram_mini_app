@@ -1,3 +1,4 @@
 [✊, ✌️, ✋]
 
-- HOME page (Ranked and Free cards) to redirects corresponding page
+- HOME page Add redirects 
+- Show on HOME the user_id with balance and jackpot at bellow of jackpot btn
